@@ -1,0 +1,110 @@
+public class Main {
+    public static void main(String[] args) {
+
+        Car car = new Car("Tesla", "Red", 120);
+        car.go();
+        car.setSpeed(150);
+        car.go();
+
+        Women woman = new Women();
+        woman.inputAge(); // Ввод возраста
+        woman.describe(); // Вывод возраста
+
+        Men man = new Men();
+        man.setAge(30);
+        man.describe();
+    }
+}
+Car.java
+
+public class Car implements Movable {
+    private String model;
+    private String color;
+    private int speed;
+
+
+    public Car(String model, String color, int speed) {
+        this.model = model;
+        this.color = color;
+        this.speed = speed;
+    }
+
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    // Реализация метода go() из интерфейса Movable
+    @Override
+    public void go() {
+        System.out.println("Машина движется со скоростью " + speed + " Км/ч.");
+    }
+}
+Human.java
+
+public abstract class Human {
+    private int age;
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+
+    public abstract void describe();
+}
+Women.java
+import java.util.Scanner;
+
+
+public class Women extends Human {
+    @Override
+    public void describe() {
+        System.out.println("Возраст женщины " + getAge() + ".");
+    }
+
+
+    public void inputAge() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите возраст женщины: ");
+        int age = scanner.nextInt();
+        setAge(age);
+    }
+}
+Men.java
+
+public class Men extends Human {
+    @Override
+    public void describe() {
+        System.out.println("Возраст мужчины " + getAge() + ".");
+    }
+}
+Movable.java
+
+public interface Movable {
+    void go();
+}
