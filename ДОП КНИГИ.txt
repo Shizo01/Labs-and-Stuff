@@ -1,0 +1,183 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Library library = new Library();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nМеню:");
+            System.out.println("1. Добавить книгу");
+            System.out.println("2. Показать книги");
+            System.out.println("3. Показать авторов");
+            System.out.println("4. Показать книги по жанру");
+            System.out.println("5. Выход");
+            System.out.print("Выберите вариант: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Введите название книги: ");
+                    String title = scanner.nextLine();
+                    System.out.print("Введите имя автора: ");
+                    String authorName = scanner.nextLine();
+                    System.out.print("Введите жанр: ");
+                    String genre = scanner.nextLine();
+                    library.addBook(title, authorName, genre);
+                    System.out.println("Книга успешно добавлена в библиотеку!");
+                    break;
+                case 2:
+                    library.displayBooks();
+                    break;
+                case 3:
+                    library.displayAuthors();
+                    break;
+                case 4:
+                    library.displayBooksByGenre();
+                    break;
+                case 5:
+                    System.out.println("Выход");
+                    return;
+                default:
+                    System.out.println("Не смогли найти. Пожалуйста попробуйет еще раз.");
+            }
+        }
+    }
+}
+import java.util.*;
+
+public class Library {
+    private List<Book> books;
+    private Set<Author> authors;
+    private Map<String, List<Book>> booksByGenre;
+
+    public Library() {
+        this.books = new ArrayList<>();
+        this.authors = new HashSet<>();
+        this.booksByGenre = new HashMap<>();
+    }
+
+    public void addBook(String title, String authorName, String genre) {
+        // Найти или создать автора
+        Author author = findOrCreateAuthor(authorName);
+
+        // Создать книгу
+        Book book = new Book(title, author, genre);
+        books.add(book);
+        author.addBook(book);
+
+        // Добавить книгу в список по жанру
+        booksByGenre.computeIfAbsent(genre, k -> new ArrayList<>()).add(book);
+    }
+
+    private Author findOrCreateAuthor(String name) {
+        for (Author author : authors) {
+            if (author.getName().equalsIgnoreCase(name)) {
+                return author;
+            }
+        }
+        Author newAuthor = new Author(name);
+        authors.add(newAuthor);
+        return newAuthor;
+    }
+
+    public void displayBooks() {
+    if (books.isEmpty()) {
+        System.out.println("Список книг пуст.");
+        return;
+    }
+    System.out.println("Список всех книг в библиотеке:");
+    for (int i = 0; i < books.size(); i++) {
+        System.out.printf("%d. %s%n", i + 1, books.get(i).toString());
+    }
+}
+
+    public void displayAuthors() {
+        System.out.println("Авторы:");
+        for (Author author : authors) {
+            System.out.println(author.getName());
+        }
+    }
+
+    public void displayBooksByGenre() {
+    if (booksByGenre.isEmpty()) {
+        System.out.println("Нет книг, распределенных по жанрам.");
+        return;
+    }
+    System.out.println("Книги по жанрам:");
+    for (String genre : booksByGenre.keySet()) {
+        System.out.println("Жанр: " + genre);
+        List<Book> booksInGenre = booksByGenre.get(genre);
+        for (int i = 0; i < booksInGenre.size(); i++) {
+            System.out.printf("  %d. %s%n", i + 1, booksInGenre.get(i).toString());
+        }
+    }
+}
+
+}
+import java.util.HashSet;
+import java.util.Set;
+
+public class Author {
+    private String name;
+    private Set<Book> books;
+
+    public Author(String name) {
+        this.name = name;
+        this.books = new HashSet<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                ", books=" + books +
+                '}';
+    }
+}
+import java.util.HashSet;
+import java.util.Set;
+
+public class Author {
+    private String name;
+    private Set<Book> books;
+
+    public Author(String name) {
+        this.name = name;
+        this.books = new HashSet<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                ", books=" + books +
+                '}';
+    }
+}
